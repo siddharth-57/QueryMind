@@ -1,0 +1,23 @@
+# Defines the containers used by the project.
+services:
+  postgres:
+    image: pgvector/pgvector:pg17         # PostgreSQL with the pgvector extension already installed.
+    container_name: QueryMind-postgres
+
+    restart: unless-stopped
+
+# These initialize PostgreSQL the first time the container starts. 
+# Later our application will connect using these credentials.
+    environment:                         
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: QueryMind
+
+    ports:
+      - "5432:5432"     # CONNECT LOCAL HOST PORT WITH POSTGRES PORT
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

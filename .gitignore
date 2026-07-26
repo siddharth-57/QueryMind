@@ -1,0 +1,52 @@
+# Tells Git which files and folders to ignore (virtual environment, secrets, caches, etc.).
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+
+# Environment Variables
+.env
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# JetBrains
+.idea/
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Logs
+*.log
+
+# Alembic
+*.pyc
+
+# Database
+*.db
+
+# Build
+dist/
+build/
+
+# Mypy
+.mypy_cache/
+
+#Word Documentation
+*.docx
+
+#Credentials
+credentials.json
+token.json
