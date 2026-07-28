@@ -14,6 +14,7 @@ from email.utils import parsedate_to_datetime
 
 from src.models.email_message import EmailMessage
 from bs4 import BeautifulSoup
+from googleapiclient.errors import HttpError
 
 # Google OAuth works using scopes, which define what permissions your application requests.
 # We're only reading emails, so gmail.readonly follows the principle of least privilege.
@@ -64,7 +65,7 @@ class GmailProvider(EmailProvider):
         )
     
 # Gmail first returns message ids of the emails and then for each message id we can fetch the entire email associated with it
-    def fetch_emails(self, max_results: int = 10):
+    def fetch_emails(self, max_results: int = 10) -> list[EmailMessage]:
         results = (
             self.service.users()
             .messages()
@@ -76,15 +77,14 @@ class GmailProvider(EmailProvider):
         )
     
         parsed_emails = []
-    
+
         for message in results.get("messages", []):
-        
-            full_message = self.get_email(message["id"])
-    
             parsed_emails.append(
-                self._parse_email(full_message)
+                self._fetch_and_parse_email(
+                    message["id"]
+                )
             )
-    
+
         return parsed_emails
     
 # This method helps us get the full emails associated with message ids     
@@ -208,3 +208,87 @@ class GmailProvider(EmailProvider):
             received_at=received_at,
             has_attachments=has_attachments,
         )
+        
+#Gmail exposes the mailbox's current history ID through profile API. each email is associated with a history ID
+# history ID exposes the mailbox's current state
+# this method will help save the latest history ID after a successfull sync
+# we first store the emails and then get the latest history id and store it in syncstate table
+# next fetching of emails start after the latest point of history in the syncstate table 
+    def get_latest_history_id(self) -> str:
+        """
+        Returns the latest history ID of the Gmail mailbox.
+        """
+
+        profile = (
+            self.service.users()
+            .getProfile(userId="me")
+            .execute()
+        )
+
+        return profile["historyId"]
+    
+    
+# This function gets the changes since the last history Id.
+# Note: Gmail's history API doesn't return emails, it returns message Ids since the last history Id. we must download these emails using these message Ids
+    def get_history(self, start_history_id: str) -> list:
+        response = (
+            self.service.users()
+            .history()
+            .list(
+                userId="me",
+                startHistoryId=start_history_id,
+            )
+            .execute()
+        )
+
+        return response.get("history", [])
+    
+    
+    
+# Extract the message Ids of the latest Emails 
+    def extract_message_ids(self, history: list) -> list[str]:
+        message_ids = set()         #Gmail can sometimes report the same message multiple times in history hence we need to use set here
+
+        for record in history:
+            for item in record.get("messagesAdded", []):
+                message = item.get("message")
+
+                if not message:
+                    continue
+
+                if "DRAFT" in message.get("labelIds", []):      #ignores draft messages
+                    continue
+
+                message_ids.add(message["id"])
+
+        return list(message_ids)
+    
+    
+    
+# Helper function to be used in methods for fetching email 
+    def _fetch_and_parse_email(self, message_id: str,) -> EmailMessage:
+        return self._parse_email(
+            self.get_email(message_id)
+            )
+    
+    
+# for the message Ids of the latest emails given by gmail we fetch the full emails and parse them and return them
+    def fetch_emails_by_ids(self, message_ids: list[str], ) -> list[EmailMessage]:
+        parsed_emails = []
+
+        for message_id in message_ids:
+            try:
+                parsed_emails.append(
+                    self._fetch_and_parse_email(message_id)
+                )
+            # error handling for deleted messages as their history id still exists
+            except HttpError as e:
+                if e.resp.status == 404:
+                    print(
+                        f"Skipping message '{message_id}' because it no longer exists."
+                    )
+                    continue
+
+                raise
+
+        return parsed_emails

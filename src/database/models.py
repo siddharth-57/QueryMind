@@ -87,7 +87,7 @@ class Email(Base):
         nullable=False,
     )
 
-
+# Every sync ever performed. useful for Audit Log.
 class SyncHistory(Base):
     __tablename__ = "sync_history"
 
@@ -134,4 +134,30 @@ class SyncHistory(Base):
     status: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
+    )
+    
+# Current synchronization checkpoint
+class SyncState(Base):
+    __tablename__ = "sync_state"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+
+    provider: Mapped[str] = mapped_column(
+        String(50),
+        unique=True,
+        nullable=False,
+    )
+
+    last_history_id: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True,
+    )
+
+    last_synced_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
     )
