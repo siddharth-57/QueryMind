@@ -46,3 +46,27 @@ class EmailRepository:
             )
             .first()
         )
+        
+        
+
+    def get_unchunked_emails(self) -> list[Email]:
+        return (
+            self.db.query(Email)
+            .filter(Email.is_chunked.is_(False))
+            .all()
+        )
+    
+    
+    
+    def mark_as_chunked(self, email_id: int) -> None:
+        email = (
+            self.db.query(Email)
+            .filter(Email.id == email_id)
+            .first()
+        )
+
+        if email is None:
+            return
+
+        email.is_chunked = True
+        self.db.commit()

@@ -50,3 +50,6 @@ build/
 #Credentials
 credentials.json
 token.json
+
+#csv file
+emails.csv
