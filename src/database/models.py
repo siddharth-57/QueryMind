@@ -1,10 +1,13 @@
-from sqlalchemy.orm import DeclarativeBase
 import uuid
 from datetime import datetime
+from datetime import UTC
 
 from sqlalchemy import Boolean, DateTime, Integer, String, Text, func
+from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import Boolean
+
 
 # Every table in this project will inherit from this base.
 # This is how SQLAlchemy will know which classes represent database tables.
@@ -86,6 +89,12 @@ class Email(Base):
         onupdate=func.now(),
         nullable=False,
     )
+    
+    is_chunked: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+    )
 
 # Every sync ever performed. useful for Audit Log.
 class SyncHistory(Base):
@@ -160,4 +169,36 @@ class SyncState(Base):
     last_synced_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
+    )
+    
+#Table to store chunks of emails
+class EmailChunk(Base):
+    __tablename__ = "email_chunks"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+
+    email_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("emails.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    chunk_index: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    content: Mapped[str] = mapped_column(
+        Text,
+        nullable=False,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(UTC),
     )

@@ -1,0 +1,62 @@
+.
+├── alembic
+│   ├── env.py
+│   ├── README
+│   ├── script.py.mako
+│   └── versions
+│       ├── 32b454398c68_create_emails_and_sync_history_tables.py
+│       ├── b56124af2629_add_sync_state_table.py
+│       └── faf53dcd4e83_add_preprocessing_tables.py
+├── alembic.ini
+├── credentials.json
+├── docker
+├── docker-compose.yml
+├── docs
+│   ├── ~$cumentation.docx
+│   └── Documentation.docx
+├── project_structure.txt
+├── README.md
+├── requirements.txt
+├── scripts
+│   ├── test_connection.py
+│   ├── test_gmail.py
+│   └── test_sync_service.py
+├── src
+│   ├── cli
+│   │   └── __init__.py
+│   ├── config
+│   │   ├── __init__.py
+│   │   └── settings.py
+│   ├── database
+│   │   ├── __init__.py
+│   │   ├── crud.py
+│   │   ├── database.py
+│   │   └── models.py
+│   ├── embeddings
+│   │   └── __init__.py
+│   ├── ingestion
+│   │   ├── __init__.py
+│   │   ├── outlook_client.py
+│   │   ├── providers
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   └── gmail.py
+│   │   └── sync_service.py
+│   ├── llm
+│   │   └── __init__.py
+│   ├── models
+│   │   └── email_message.py
+│   ├── processing
+│   │   └── __init__.py
+│   ├── repositories
+│   │   ├── email_repository.py
+│   │   ├── sync_history_repository.py
+│   │   └── sync_state_repository.py
+│   ├── retrieval
+│   │   └── __init__.py
+│   └── utils
+│       └── __init__.py
+├── tests
+└── token.json
+
+20 directories, 40 files
