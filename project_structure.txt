@@ -15,15 +15,21 @@
 │   ├── ~$cumentation.docx
 │   └── Documentation.docx
 ├── emails.csv
+├── improvements.txt
 ├── project_structure.txt
 ├── README.md
 ├── requirements.txt
 ├── scripts
+│   ├── index_chunks.py
 │   ├── test_chunking.py
 │   ├── test_cleaning.py
 │   ├── test_connection.py
+│   ├── test_embeddings.py
 │   ├── test_gmail.py
 │   ├── test_preprocessing_pipeline.py
+│   ├── test_qdrant.py
+│   ├── test_relationships.py
+│   ├── test_search.py
 │   └── test_sync_service.py
 ├── src
 │   ├── cli
@@ -37,7 +43,12 @@
 │   │   ├── database.py
 │   │   └── models.py
 │   ├── embeddings
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── providers
+│   │   │   ├── __init__.py
+│   │   │   ├── base.py
+│   │   │   └── ollama.py
+│   │   └── service.py
 │   ├── ingestion
 │   │   ├── __init__.py
 │   │   ├── outlook_client.py
@@ -62,9 +73,14 @@
 │   │   └── sync_state_repository.py
 │   ├── retrieval
 │   │   └── __init__.py
-│   └── utils
-│       └── __init__.py
+│   ├── utils
+│   │   └── __init__.py
+│   └── vector_db
+│       ├── __init__.py
+│       ├── client.py
+│       ├── collections.py
+│       └── store.py
 ├── tests
 └── token.json
 
-20 directories, 48 files
+22 directories, 62 files

@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     EMBEDDING_PROVIDER:str
     EMBEDDING_MODEL:str
     EMBEDDING_DIMENSION:int
+    
+    LLM_PROVIDER: str
+    LLM_MODEL: str
 
     model_config = SettingsConfigDict(
         env_file=".env",

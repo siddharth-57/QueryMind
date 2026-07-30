@@ -1,0 +1,1 @@
+# whose responsibility would be: question->embedding->vector search->context->llm->answer

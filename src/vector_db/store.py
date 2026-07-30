@@ -4,7 +4,7 @@ from src.vector_db.client import get_qdrant_client
 from src.config.settings import settings
 from qdrant_client.models import ScoredPoint
 
-#This file simply has the implementation for storing in vector database
+#This file simply has the implementation for storing/searching in vector database
 class VectorStore:
     def __init__(self):
         self.client = get_qdrant_client()
