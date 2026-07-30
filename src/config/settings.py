@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     DATABASE_USER: str
     DATABASE_PASSWORD: str
 
+    QDRANT_HOST: str
+    QDRANT_PORT: int
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"
