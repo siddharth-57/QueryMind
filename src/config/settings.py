@@ -10,8 +10,12 @@ class Settings(BaseSettings):
     DATABASE_USER: str
     DATABASE_PASSWORD: str
 
-    QDRANT_HOST: str
-    QDRANT_PORT: int
+    QDRANT_URL:str
+    QDRANT_COLLECTION:str
+
+    EMBEDDING_PROVIDER:str
+    EMBEDDING_MODEL:str
+    EMBEDDING_DIMENSION:int
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -14,12 +14,16 @@
 ├── docs
 │   ├── ~$cumentation.docx
 │   └── Documentation.docx
+├── emails.csv
 ├── project_structure.txt
 ├── README.md
 ├── requirements.txt
 ├── scripts
+│   ├── test_chunking.py
+│   ├── test_cleaning.py
 │   ├── test_connection.py
 │   ├── test_gmail.py
+│   ├── test_preprocessing_pipeline.py
 │   └── test_sync_service.py
 ├── src
 │   ├── cli
@@ -46,9 +50,13 @@
 │   │   └── __init__.py
 │   ├── models
 │   │   └── email_message.py
-│   ├── processing
-│   │   └── __init__.py
+│   ├── preprocessing
+│   │   ├── __init__.py
+│   │   ├── chunking.py
+│   │   ├── cleaning.py
+│   │   └── pipeline.py
 │   ├── repositories
+│   │   ├── chunk_repository.py
 │   │   ├── email_repository.py
 │   │   ├── sync_history_repository.py
 │   │   └── sync_state_repository.py
@@ -59,4 +67,4 @@
 ├── tests
 └── token.json
 
-20 directories, 40 files
+20 directories, 48 files
