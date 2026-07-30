@@ -5,7 +5,12 @@ from datetime import UTC
 from sqlalchemy import Boolean, DateTime, Integer, String, Text, func
 from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    relationship,
+)
 from sqlalchemy import Boolean
 
 
@@ -95,6 +100,13 @@ class Email(Base):
         nullable=False,
         default=False,
     )
+    
+# we add this to provide the emailchunk table with the data of this table to be used as payload in vector db
+    chunks: Mapped[list["EmailChunk"]] = relationship(
+    back_populates="email",
+    cascade="all, delete-orphan",
+    )
+
 
 # Every sync ever performed. useful for Audit Log.
 class SyncHistory(Base):
@@ -201,4 +213,10 @@ class EmailChunk(Base):
         DateTime(timezone=True),
         nullable=False,
         default=lambda: datetime.now(UTC),
+    )
+    
+    #This is needed because the data we want to store as payload for the embeddings is stored in the Emails table
+    # and doing joins everytime we want to store data in vector db is more expensive
+    email: Mapped["Email"] = relationship(
+    back_populates="chunks",
     )

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from src.database.models import EmailChunk
+from sqlalchemy.orm import joinedload
 
 
 class ChunkRepository:
@@ -53,6 +54,20 @@ class ChunkRepository:
             )
             .all()
         )
+    
+    
+# This method fetches all chunks from email_chunks table to be converted into embeddings and stored in vector db
+# Without joinedload, SQLAlchemy may execute one query to fetch all chunks and then an additional query for each related email as you access chunk.email
+# With joinedload, it performs a single query that fetches the chunks and their associated emails together. For an indexing job that processes every chunk, this is much more efficient.
+# later incremental indexing will be added 
+    def get_all_chunks(self) -> list[EmailChunk]:
+        return (
+            self.db.query(EmailChunk)
+            .options(joinedload(EmailChunk.email))
+            .order_by(EmailChunk.created_at)
+            .all()
+        )
+    
 
     def delete_chunks(
         self,
@@ -71,3 +86,5 @@ class ChunkRepository:
         )
 
         self.db.commit()
+        
+    
