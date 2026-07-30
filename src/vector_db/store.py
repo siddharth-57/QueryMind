@@ -1,9 +1,8 @@
 from uuid import UUID
-
 from qdrant_client.models import PointStruct
-
 from src.vector_db.client import get_qdrant_client
 from src.config.settings import settings
+from qdrant_client.models import ScoredPoint
 
 #This file simply has the implementation for storing in vector database
 class VectorStore:
@@ -44,3 +43,31 @@ class VectorStore:
         )
 
         return response.count
+    
+
+#This method calls Qdrant's search API with the query embedding and requests payload as well
+#stores each result as python dictionary in a list
+    def search(
+        self,
+        embedding: list[float],
+        limit: int = 5,
+    ) -> list[dict]:
+
+        results: list[ScoredPoint] = self.client.query_points(
+            collection_name=settings.QDRANT_COLLECTION,
+            query=embedding,
+            limit=limit,
+            with_payload=True,
+        ).points
+
+        search_results = []
+
+        for result in results:
+            search_results.append(
+                {
+                    "score": result.score,
+                    "payload": result.payload,
+                }
+            )
+
+        return search_results
