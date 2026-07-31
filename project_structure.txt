@@ -26,9 +26,12 @@
 │   ├── test_connection.py
 │   ├── test_embeddings.py
 │   ├── test_gmail.py
+│   ├── test_llm.py
 │   ├── test_preprocessing_pipeline.py
+│   ├── test_prompt_builder.py
 │   ├── test_qdrant.py
 │   ├── test_relationships.py
+│   ├── test_retrieval.py
 │   ├── test_search.py
 │   └── test_sync_service.py
 ├── src
@@ -58,7 +61,11 @@
 │   │   │   └── gmail.py
 │   │   └── sync_service.py
 │   ├── llm
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── providers
+│   │   │   ├── base.py
+│   │   │   └── ollama.py
+│   │   └── service.py
 │   ├── models
 │   │   └── email_message.py
 │   ├── preprocessing
@@ -72,7 +79,10 @@
 │   │   ├── sync_history_repository.py
 │   │   └── sync_state_repository.py
 │   ├── retrieval
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── prompt_builder.py
+│   │   ├── query_enhancement.py
+│   │   └── service.py
 │   ├── utils
 │   │   └── __init__.py
 │   └── vector_db
@@ -83,4 +93,4 @@
 ├── tests
 └── token.json
 
-22 directories, 62 files
+23 directories, 71 files
