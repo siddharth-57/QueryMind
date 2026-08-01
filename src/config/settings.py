@@ -13,12 +13,21 @@ class Settings(BaseSettings):
     QDRANT_URL:str
     QDRANT_COLLECTION:str
 
+    # Embedding Configuration
     EMBEDDING_PROVIDER:str
     EMBEDDING_MODEL:str
     EMBEDDING_DIMENSION:int
     
+    # LLM Configuration
     LLM_PROVIDER: str
     LLM_MODEL: str
+    
+    # API Keys
+    # Making them optional with an empty default lets you configure only the providers you're actually using.
+    OPENAI_API_KEY: str = ""        #this makes sure that "" is the default value so we dont have to provide api keys for all simultaneously
+    ANTHROPIC_API_KEY: str = ""
+    GOOGLE_API_KEY: str = ""
+    VOYAGE_API_KEY: str = ""
 
     model_config = SettingsConfigDict(
         env_file=".env",
