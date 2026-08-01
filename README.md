@@ -163,7 +163,6 @@ Return Response
 - Hybrid Search (Vector + Keyword)
 - Multi-document retrieval
 - Streaming responses
-- Support for multiple LLM providers
 - Conversation memory
 - User authentication
 - Web interface
