@@ -1,8 +1,8 @@
 from src.config.settings import settings
 
-from src.embeddings.providers.ollama import (
-    OllamaEmbeddingProvider,
-)
+from src.embeddings.providers.ollama import OllamaEmbeddingProvider
+from src.embeddings.providers.openai import OpenAIProvider
+from src.embeddings.providers.voyage import VoyageProvider
 
 
 class EmbeddingService:
@@ -11,7 +11,13 @@ class EmbeddingService:
 
         if settings.EMBEDDING_PROVIDER == "ollama":
             self.provider = OllamaEmbeddingProvider()
-
+            
+        elif settings.EMBEDDING_PROVIDER == "openai":
+            self.provider = OpenAIProvider()
+        
+        elif settings.EMBEDDING_PROVIDER == "voyage":
+            self.provider = VoyageProvider()
+        
         else:
             raise ValueError(
                 f"Unsupported embedding provider: "
@@ -19,5 +25,4 @@ class EmbeddingService:
             )
 
     def embed(self, text: str) -> list[float]:
-
         return self.provider.embed(text)

@@ -1,6 +1,8 @@
 from src.config.settings import settings
 from src.llm.providers.ollama import OllamaProvider
-
+from src.llm.providers.openai import OpenAIProvider
+from src.llm.providers.anthropic import AnthropicProvider
+from src.llm.providers.gemini import GeminiProvider
 
 class LLMService:
 
@@ -8,6 +10,15 @@ class LLMService:
 
         if settings.LLM_PROVIDER == "ollama":
             self.provider = OllamaProvider()
+
+        elif settings.LLM_PROVIDER == "openai":
+            self.provider = OpenAIProvider()
+
+        elif settings.LLM_PROVIDER == "anthropic":
+            self.provider = AnthropicProvider()
+
+        elif settings.LLM_PROVIDER == "gemini":
+            self.provider = GeminiProvider()
 
         else:
             raise ValueError(
